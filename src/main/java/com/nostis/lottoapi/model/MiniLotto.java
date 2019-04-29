@@ -6,5 +6,5 @@ import javax.persistence.Entity;
 
 @Data
 @Entity
-public class MiniLotto {
+public class MiniLotto extends DrawResult {
 }
