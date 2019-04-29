@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class MiniLottoService {
     @Autowired
-    MiniLottoDTOCrud miniLottoDTOCrud;
+    private MiniLottoDTOCrud miniLottoDTOCrud;
 }

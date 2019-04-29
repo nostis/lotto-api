@@ -1,14 +1,11 @@
 package com.nostis.lottoapi.task;
 
-import org.springframework.stereotype.Component;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-@Component
 public class MBNet {
     private URL pageUrl;
     private String pageSource;
@@ -40,9 +37,11 @@ public class MBNet {
         String inputLine;
         while ((inputLine = reader.readLine()) != null) {
             stringBuilder.append(inputLine);
+            lines++;
             stringBuilder.append("\n");
 
-            lines++;
+
+
         }
 
         pageSource = stringBuilder.toString();
