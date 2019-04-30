@@ -38,24 +38,28 @@ public class LottoSource extends MBNet{
         Optional<Lotto> lastDraw = lottoService.findDrawByDrawNumber(getLastDrawNumber());
 
         if(!lastDraw.isPresent()){
-            //System.out.println("Present");
             if(lottoService.getAllDraws().size() == 0){
                 //populate all records
                 BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
-                Pattern pattern = Pattern.compile("([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))");
+
+                Pattern datePattern = Pattern.compile("([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))");
+                Pattern drawNumberPattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
 
                 String line = "";
+                Date date;
+                Long drawNumber;
 
                 while((line = bufReader.readLine()) != null) {
-                    Matcher matcher = pattern.matcher(line);
+                    Matcher dateMatcher = datePattern.matcher(line);
+                    Matcher drawNumberMatcher = drawNumberPattern.matcher(line);
 
-                    if(matcher.find()){
+                    if(dateMatcher.find()){
                         //System.out.println(matcher.group());
                         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-                        Date date = new Date();
+                        date = new Date();
 
                         try {
-                             date = format.parse(matcher.group());
+                             date = format.parse(dateMatcher.group());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -64,6 +68,15 @@ public class LottoSource extends MBNet{
                     }
                     else{
                         throw new IOException("Error during extracting date");
+                    }
+
+                    if(drawNumberMatcher.find()){
+                        drawNumber = Long.parseLong(drawNumberMatcher.group());
+                        System.out.println(drawNumber);
+                    }
+                    else{
+                        System.out.println(line);
+                        throw new IOException("Error during extracting draw number");
                     }
                 }
             }

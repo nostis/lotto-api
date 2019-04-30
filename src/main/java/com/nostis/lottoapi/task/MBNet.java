@@ -37,7 +37,7 @@ public class MBNet {
             stringBuilder.append("\n");
         }
 
-        Pattern pattern = Pattern.compile("\\w++(?=\\. [^ ]++ \\d++,\\w++,\\d\\d,\\d++,\\d\\d)");
+        Pattern pattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
         Matcher matcher = pattern.matcher(previousLine);
 
         if(matcher.find()){
