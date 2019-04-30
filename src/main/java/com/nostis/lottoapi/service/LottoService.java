@@ -24,4 +24,8 @@ public class LottoService {
     public Optional<Lotto> findDrawByDrawNumber(Long number){
         return lottoDTOCrud.findByDrawNumber(number);
     }
+
+    public void saveAllDraws(Iterable<Lotto> draws){
+        lottoDTOCrud.saveAll(draws);
+    }
 }

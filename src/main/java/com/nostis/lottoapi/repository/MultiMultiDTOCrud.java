@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MultiMultiDTOCrud extends JpaRepository<MultiMulti, Long> {
+public interface MultiMultiDTOCrud extends JpaRepository<MultiMulti, Long>, CustomMultiMulti<MultiMulti, Long> {
 }

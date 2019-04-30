@@ -51,9 +51,10 @@ public class LottoSource extends MBNet{
                 Pattern drawResultPattern = Pattern.compile("\\d++[,\\d]++");
 
                 String line = "";
-                Date date;
+                Date drawDate;
                 Long drawNumber;
                 List<Byte> drawResult;
+                List<Lotto> draws = new ArrayList<>();
 
                 while((line = bufReader.readLine()) != null) {
                     Matcher dateMatcher = datePattern.matcher(line);
@@ -62,10 +63,10 @@ public class LottoSource extends MBNet{
 
                     if(dateMatcher.find()){
                         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-                        date = new Date();
+                        drawDate = new Date();
 
                         try {
-                             date = format.parse(dateMatcher.group());
+                            drawDate = format.parse(dateMatcher.group());
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -97,10 +98,12 @@ public class LottoSource extends MBNet{
                     else{
                         throw new IOException("Error during extracting draw result");
                     }
-
-
-
+                    //System.out.println(drawNumber + " " + drawDate + " " + drawResult);
+                    //lottoService.saveDraw(new Lotto(drawNumber, drawDate, drawResult));
+                    draws.add(new Lotto(drawNumber, drawDate, drawResult));
                 }
+
+                lottoService.saveAllDraws(draws);
             }
             else{
                 //only add missing record/s
