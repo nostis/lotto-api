@@ -15,10 +15,14 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class LottoSource extends MBNet{
@@ -44,17 +48,19 @@ public class LottoSource extends MBNet{
 
                 Pattern datePattern = Pattern.compile("([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))");
                 Pattern drawNumberPattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
+                Pattern drawResultPattern = Pattern.compile("\\d++[,\\d]++");
 
                 String line = "";
                 Date date;
                 Long drawNumber;
+                List<Byte> drawResult;
 
                 while((line = bufReader.readLine()) != null) {
                     Matcher dateMatcher = datePattern.matcher(line);
                     Matcher drawNumberMatcher = drawNumberPattern.matcher(line);
+                    Matcher drawResultMatcher = drawResultPattern.matcher(line);
 
                     if(dateMatcher.find()){
-                        //System.out.println(matcher.group());
                         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
                         date = new Date();
 
@@ -64,20 +70,36 @@ public class LottoSource extends MBNet{
                             e.printStackTrace();
                         }
 
-                        //System.out.println(date);
                     }
                     else{
                         throw new IOException("Error during extracting date");
                     }
 
+
                     if(drawNumberMatcher.find()){
                         drawNumber = Long.parseLong(drawNumberMatcher.group());
-                        System.out.println(drawNumber);
+                        //System.out.println(drawNumber);
                     }
                     else{
                         System.out.println(line);
                         throw new IOException("Error during extracting draw number");
                     }
+
+
+                    if(drawResultMatcher.find()){
+                        //System.out.println(drawResultMatcher.group());
+                        drawResult = Stream.of(drawResultMatcher.group().split(","))
+                                .map(String::trim)
+                                .map(Byte::parseByte)
+                                .collect(Collectors.toList());
+                        //System.out.println(drawResult);
+                    }
+                    else{
+                        throw new IOException("Error during extracting draw result");
+                    }
+
+
+
                 }
             }
             else{
