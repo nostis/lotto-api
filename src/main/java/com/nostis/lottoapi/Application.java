@@ -12,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
@@ -55,11 +54,10 @@ public class Application {
             list.add((byte) 1);
 
             Lotto lotto1 = new Lotto( 1L, new GregorianCalendar(2019, Calendar.MAY, 1, 0,0).getTime(), list);
-            lottoService.saveDraw(lotto1);
+            //lottoService.saveDraw(lotto1);
 
             Lotto lotto2 = new Lotto( 6249L, new GregorianCalendar(2019, Calendar.APRIL, 1, 0, 0).getTime(), list);
-            lottoService.saveDraw(lotto2);
+            //lottoService.saveDraw(lotto2);
         };
     }
-
 }
