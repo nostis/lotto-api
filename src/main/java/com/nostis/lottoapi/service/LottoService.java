@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LottoService {
@@ -18,5 +19,9 @@ public class LottoService {
 
     public List<Lotto> getAllDraws(){
         return lottoDTOCrud.findAll();
+    }
+
+    public Optional<Lotto> findDrawByDrawNumber(Long number){
+        return lottoDTOCrud.findByDrawNumber(number);
     }
 }

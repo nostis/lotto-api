@@ -1,5 +1,6 @@
 package com.nostis.lottoapi.task;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,25 +10,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MBNet {
-    private URL pageUrl;
     private String pageSource;
     private Long lastDrawNumber;
 
-    public MBNet(URL pageUrl){
-        this.pageUrl = pageUrl;
-
+    public MBNet() {
         pageSource = "";
         lastDrawNumber = 0L;
-
-        try {
-            updatePageSource();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    //@Scheduled
-    public void updatePageSource() throws IOException {
+    public void updatePageSource(URL pageUrl) throws IOException {
         lastDrawNumber = 0L;
         pageSource = "";
 
@@ -45,7 +36,6 @@ public class MBNet {
             stringBuilder.append(inputLine);
             stringBuilder.append("\n");
         }
-
 
         Pattern pattern = Pattern.compile("\\w++(?=\\. [^ ]++ \\d++,\\w++,\\d\\d,\\d++,\\d\\d)");
         Matcher matcher = pattern.matcher(previousLine);
