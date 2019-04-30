@@ -10,15 +10,17 @@ import java.util.List;
 @Entity
 public class MiniLotto {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long drawNumber;
     @Column
     private Date drawDate;
     @Column
     @ElementCollection
     private List<Byte> numbers;
 
-    public MiniLotto(Long id, Date drawDate, List<Byte> numbers) {
-        this.id = id;
+    public MiniLotto(Long drawNumber, Date drawDate, List<Byte> numbers) {
+        this.drawNumber = drawNumber;
         this.drawDate = drawDate;
         this.numbers = numbers;
     }
