@@ -14,7 +14,7 @@ public class Lotto {
     @Column
     private Date drawDate;
     @Column
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     private List<Byte> numbers;
 
     public Lotto(Long id, Date drawDate, List<Byte> numbers) {

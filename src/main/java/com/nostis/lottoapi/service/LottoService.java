@@ -12,7 +12,7 @@ public class LottoService {
     @Autowired
     private LottoDTOCrud lottoDTOCrud;
 
-    public void saveLottoDraw(Lotto lotto){
+    public void saveDraw(Lotto lotto){
         lottoDTOCrud.save(lotto);
     }
 
