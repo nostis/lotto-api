@@ -1,5 +1,6 @@
 package com.nostis.lottoapi.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +17,7 @@ public class MultiMulti {
     private Long id;
     private Long drawNumber;
     @Column
+    @JsonFormat(timezone = "Europe/Warsaw", pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date drawDate;
     @Column
     @ElementCollection
