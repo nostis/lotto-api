@@ -1,6 +1,7 @@
 package com.nostis.lottoapi.model;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +11,8 @@ import java.util.List;
 @Entity
 public class MultiMulti {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "gen")
+    @GenericGenerator(name = "gen", strategy = "increment")
     private Long id;
     private Long drawNumber;
     @Column

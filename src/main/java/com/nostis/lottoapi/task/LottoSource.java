@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +36,8 @@ public class LottoSource extends MBNet{
         updatePageSource(pageUrl);
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Transactional
+    @Scheduled(fixedDelay = 5000, initialDelay = 5000)
     public void updateDrawsInDatabase() throws IOException {
         updatePageSource(pageUrl);
 
@@ -79,27 +81,22 @@ public class LottoSource extends MBNet{
 
                     if(drawNumberMatcher.find()){
                         drawNumber = Long.parseLong(drawNumberMatcher.group());
-                        //System.out.println(drawNumber);
                     }
                     else{
-                        System.out.println(line);
                         throw new IOException("Error during extracting draw number");
                     }
 
 
                     if(drawResultMatcher.find()){
-                        //System.out.println(drawResultMatcher.group());
                         drawResult = Stream.of(drawResultMatcher.group().split(","))
                                 .map(String::trim)
                                 .map(Byte::parseByte)
                                 .collect(Collectors.toList());
-                        //System.out.println(drawResult);
                     }
                     else{
                         throw new IOException("Error during extracting draw result");
                     }
-                    //System.out.println(drawNumber + " " + drawDate + " " + drawResult);
-                    //lottoService.saveDraw(new Lotto(drawNumber, drawDate, drawResult));
+
                     draws.add(new Lotto(drawNumber, drawDate, drawResult));
                 }
 
