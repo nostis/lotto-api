@@ -3,6 +3,8 @@ package com.nostis.lottoapi.service;
 import com.nostis.lottoapi.model.MultiMulti;
 import com.nostis.lottoapi.repository.MultiMultiDTOCrud;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,5 +29,9 @@ public class MultiMultiService {
 
     public void saveAllDraws(Iterable<MultiMulti> draws){
         multiMultiDTOCrud.saveAll(draws);
+    }
+
+    public Page<MultiMulti> findPaginatedDraw(int page, int size){
+        return multiMultiDTOCrud.findAll(PageRequest.of(page, size));
     }
 }

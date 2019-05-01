@@ -3,6 +3,8 @@ package com.nostis.lottoapi.service;
 import com.nostis.lottoapi.model.MiniLotto;
 import com.nostis.lottoapi.repository.MiniLottoDTOCrud;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,5 +29,9 @@ public class MiniLottoService {
 
     public void saveAllDraws(Iterable<MiniLotto> draws){
         miniLottoDTOCrud.saveAll(draws);
+    }
+
+    public Page<MiniLotto> findPaginatedDraw(int page, int size){
+        return miniLottoDTOCrud.findAll(PageRequest.of(page, size));
     }
 }
