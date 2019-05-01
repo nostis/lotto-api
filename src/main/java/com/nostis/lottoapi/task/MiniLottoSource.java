@@ -48,65 +48,95 @@ public class MiniLottoSource extends MBNet {
                 //populate all records
                 BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
 
-                Pattern datePattern = Pattern.compile("([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))");
-                Pattern drawNumberPattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
-                Pattern drawResultPattern = Pattern.compile("\\d++[,\\d]++");
-
                 String line = "";
-                Date drawDate;
-                Long drawNumber;
-                List<Byte> drawResult;
+
                 List<MiniLotto> draws = new ArrayList<>();
 
+                Long drawNumber;
+                Date drawDate;
+                List<Byte> drawResult;
+
                 while((line = bufReader.readLine()) != null) {
-                    Matcher dateMatcher = datePattern.matcher(line);
-                    Matcher drawNumberMatcher = drawNumberPattern.matcher(line);
-                    Matcher drawResultMatcher = drawResultPattern.matcher(line);
+                    drawNumber = getDrawNumberFromLine(line);
+                    drawDate = getDrawDateFromLine(line);
+                    drawResult = getDrawResultFromLine(line);
 
-                    if(dateMatcher.find()){
-                        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-                        drawDate = new Date();
-
-                        try {
-                            drawDate = format.parse(dateMatcher.group());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    else{
-                        throw new IOException("Error during extracting date");
-                    }
-
-
-                    if(drawNumberMatcher.find()){
-                        drawNumber = Long.parseLong(drawNumberMatcher.group());
-                    }
-                    else{
-                        throw new IOException("Error during extracting draw number");
-                    }
-
-
-                    if(drawResultMatcher.find()){
-                        drawResult = Stream.of(drawResultMatcher.group().split(","))
-                                .map(String::trim)
-                                .map(Byte::parseByte)
-                                .collect(Collectors.toList());
-                    }
-                    else{
-                        throw new IOException("Error during extracting draw result");
-                    }
-
+                    //draws.add(new MiniLotto(getDrawNumberFromLine(line), getDrawDateFromLine(line), getDrawResultFromLine(line)));
                     draws.add(new MiniLotto(drawNumber, drawDate, drawResult));
                 }
 
                 miniLottoService.saveAllDraws(draws);
             }
             else{
+                Long lastExisting;
+                List<MiniLotto> existingDraws = miniLottoService.getAllDraws();
+                List<MiniLotto> drawsToAdd = new ArrayList<>();
+                for(int i = existingDraws.size() - 1; i > 0; i--){
+
+                }
                 //only add missing record/s
             }
 
         }
 
+    }
+
+    private Date getDrawDateFromLine(String line) throws IOException {
+        Pattern datePattern = Pattern.compile("([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))");
+        Matcher dateMatcher = datePattern.matcher(line);
+
+        Date drawDate;
+
+        if(dateMatcher.find()){
+            DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            drawDate = new Date();
+
+            try {
+                drawDate = format.parse(dateMatcher.group());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
+        else{
+            throw new IOException("Error during extracting date");
+        }
+
+        return drawDate;
+    }
+
+    private Long getDrawNumberFromLine(String line) throws IOException {
+        Pattern drawNumberPattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
+        Matcher drawNumberMatcher = drawNumberPattern.matcher(line);
+
+        Long drawNumber;
+
+        if(drawNumberMatcher.find()){
+            drawNumber = Long.parseLong(drawNumberMatcher.group());
+        }
+        else{
+            throw new IOException("Error during extracting draw number");
+        }
+
+        return drawNumber;
+    }
+
+    private List<Byte> getDrawResultFromLine(String line) throws IOException {
+        Pattern drawResultPattern = Pattern.compile("\\d++[,\\d]++");
+        Matcher drawResultMatcher = drawResultPattern.matcher(line);
+
+        List<Byte> drawResult;
+
+        if(drawResultMatcher.find()){
+            drawResult = Stream.of(drawResultMatcher.group().split(","))
+                    .map(String::trim)
+                    .map(Byte::parseByte)
+                    .collect(Collectors.toList());
+        }
+        else{
+            throw new IOException("Error during extracting draw result");
+        }
+
+        return drawResult;
     }
 }
