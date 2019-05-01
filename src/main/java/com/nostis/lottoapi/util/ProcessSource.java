@@ -13,15 +13,12 @@ import java.util.stream.Stream;
 
 public class ProcessSource {
     //all procesing things from *Source classes
-    private final static String PTRN_DRAW_DATE = "([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))";
-    private final static String PTRN_DRAW_NUMBER = "\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)";
-    private final static String PTRN_DRAW_RESULT = "\\d++[,\\d]++";
-    private static Pattern datePattern;
-    private static Pattern drawNumberPattern;
-    private static Pattern drawResultPattern;
-    private static Matcher dateMatcher;
-    private static Matcher drawNumberMatcher;
-    private static Matcher drawResultMatcher;
+    private final String PTRN_DRAW_DATE = "([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))";
+    private final String PTRN_DRAW_NUMBER = "\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)";
+    private final String PTRN_DRAW_RESULT = "\\d++[,\\d]++";
+    private Pattern datePattern;
+    private Pattern drawNumberPattern;
+    private Pattern drawResultPattern;
 
     public ProcessSource(){
         datePattern = Pattern.compile(PTRN_DRAW_DATE);
@@ -29,8 +26,8 @@ public class ProcessSource {
         drawResultPattern = Pattern.compile(PTRN_DRAW_RESULT);
     }
 
-    public static Date getDrawDateFromLine(String line) throws IOException {
-        dateMatcher = datePattern.matcher(line);
+    public Date getDrawDateFromLine(String line) throws IOException {
+        Matcher dateMatcher = datePattern.matcher(line);
 
         Date drawDate;
 
@@ -52,8 +49,8 @@ public class ProcessSource {
         return drawDate;
     }
 
-    public static Long getDrawNumberFromLine(String line) throws IOException {
-        drawNumberMatcher = drawNumberPattern.matcher(line);
+    public Long getDrawNumberFromLine(String line) throws IOException {
+        Matcher drawNumberMatcher = drawNumberPattern.matcher(line);
 
         Long drawNumber;
 
@@ -67,8 +64,8 @@ public class ProcessSource {
         return drawNumber;
     }
 
-    public static List<Byte> getDrawResultFromLine(String line) throws IOException {
-        drawResultMatcher = drawResultPattern.matcher(line);
+    public List<Byte> getDrawResultFromLine(String line) throws IOException {
+        Matcher drawResultMatcher = drawResultPattern.matcher(line);
 
         List<Byte> drawResult;
 
