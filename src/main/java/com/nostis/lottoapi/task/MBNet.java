@@ -1,23 +1,25 @@
 package com.nostis.lottoapi.task;
 
 
+import com.nostis.lottoapi.util.ProcessSource;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MBNet {
     private String pageSource;
     private Long lastDrawNumber;
+    private ProcessSource processSource;
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
     public MBNet() {
         pageSource = "";
         lastDrawNumber = 0L;
+        processSource = new ProcessSource();
     }
 
     public void updatePageSource(URL pageUrl) throws IOException {
@@ -39,15 +41,7 @@ public class MBNet {
             stringBuilder.append("\n");
         }
 
-        Pattern pattern = Pattern.compile("\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)");
-        Matcher matcher = pattern.matcher(previousLine);
-
-        if(matcher.find()){
-            lastDrawNumber = Long.parseLong(matcher.group());
-        }
-        else{
-            throw new IOException("Can't find draw number");
-        }
+        lastDrawNumber = processSource.getDrawNumberFromLine(previousLine);
 
         pageSource = stringBuilder.toString();
 

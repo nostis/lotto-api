@@ -6,13 +6,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ProcessSource {
-    //all procesing things from *Source classes
     private final String PTRN_DRAW_DATE = "([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))";
     private final String PTRN_DRAW_NUMBER = "\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)";
     private final String PTRN_DRAW_RESULT = "\\d++[,\\d]++";
@@ -33,6 +33,8 @@ public class ProcessSource {
 
         if(dateMatcher.find()){
             DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+            format.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+
             drawDate = new Date();
 
             try {
