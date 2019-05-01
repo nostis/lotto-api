@@ -53,6 +53,7 @@ public class MultiMultiSource extends MBNet {
 
                 getLogger().info("Saving all draws gathered from page source (MultiMulti)");
                 multiMultiService.saveAllDraws(draws);
+                getLogger().info("Draws added (MultiMulti)");
             }
             else{
                 getLogger().info("Records are not up to date (MultiMulti)");
@@ -81,7 +82,7 @@ public class MultiMultiSource extends MBNet {
                 }
 
                 multiMultiService.saveAllDraws(drawsToAdd);
-                getLogger().info("Draws added (MultiMulti)");
+                getLogger().info("Draws updated (MultiMulti)");
             }
         }
     }

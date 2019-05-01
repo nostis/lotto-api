@@ -53,6 +53,7 @@ public class LottoSource extends MBNet{
 
                 getLogger().info("Saving all draws gathered from page source (Lotto)");
                 lottoService.saveAllDraws(draws);
+                getLogger().info("Draws added (Lotto)");
             }
             else{
                 getLogger().info("Records are not up to date (Lotto)");
@@ -81,7 +82,7 @@ public class LottoSource extends MBNet{
                 }
 
                 lottoService.saveAllDraws(drawsToAdd);
-                getLogger().info("Draws added (Lotto)");
+                getLogger().info("Draws updated (Lotto)");
             }
         }
     }

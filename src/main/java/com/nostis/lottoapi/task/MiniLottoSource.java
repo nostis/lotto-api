@@ -53,6 +53,7 @@ public class MiniLottoSource extends MBNet {
 
                 getLogger().info("Saving all draws gathered from page source (MiniLotto)");
                 miniLottoService.saveAllDraws(draws);
+                getLogger().info("Draws added (MiniLotto)");
             }
             else{
                 getLogger().info("Records are not up to date (MiniLotto)");
@@ -81,7 +82,7 @@ public class MiniLottoSource extends MBNet {
                 }
 
                 miniLottoService.saveAllDraws(drawsToAdd);
-                getLogger().info("Draws added (MiniLotto)");
+                getLogger().info("Draws updated (MiniLotto)");
             }
         }
     }
