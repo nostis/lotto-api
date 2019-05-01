@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +32,7 @@ public class MiniLottoSource extends MBNet {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 5000, initialDelay = 6000)
+    @Scheduled(fixedDelay = 60000, initialDelay = 6000)
     public void updateDrawsInDatabase() throws IOException {
         updatePageSource(pageUrl);
 
@@ -41,7 +40,8 @@ public class MiniLottoSource extends MBNet {
 
         if(!lastDraw.isPresent()){
             if(miniLottoService.getAllDraws().size() == 0){
-                //populate all records
+                getLogger().info("Table MiniLotto is empty; populating MiniLotto with all records");
+
                 BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
                 String line = "";
 
@@ -51,20 +51,37 @@ public class MiniLottoSource extends MBNet {
                     draws.add(new MiniLotto(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
                 }
 
+                getLogger().info("Saving all draws gathered from page source (MiniLotto)");
                 miniLottoService.saveAllDraws(draws);
             }
             else{
-                /*Long lastExisting;
+                getLogger().info("Records are not up to date (MiniLotto)");
+
                 List<MiniLotto> existingDraws = miniLottoService.getAllDraws();
+                Long lastExistingInDb = existingDraws.get(existingDraws.size() - 1).getDrawNumber();
+
                 List<MiniLotto> drawsToAdd = new ArrayList<>();
-                for(int i = existingDraws.size() - 1; i > 0; i--){
 
+                BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
+                String line;
+
+                boolean canAdd = false;
+
+                while((line = bufReader.readLine()) != null) {
+
+                    if(processSource.getDrawNumberFromLine(line).equals(lastExistingInDb + 1)){
+                        canAdd = true;
+                    }
+
+                    if(canAdd){
+                        getLogger().info("Updating: " + processSource.getDrawNumberFromLine(line) + " " + processSource.getDrawDateFromLine(line) + " " + processSource.getDrawResultFromLine(line));
+
+                        drawsToAdd.add(new MiniLotto(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
+                    }
                 }
-                //only add missing record/s
-                */
+
+                miniLottoService.saveAllDraws(drawsToAdd);
             }
-
         }
-
     }
 }

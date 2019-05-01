@@ -32,7 +32,7 @@ public class LottoSource extends MBNet{
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 5000, initialDelay = 5000)
+    @Scheduled(fixedDelay = 60000, initialDelay = 5000)
     public void updateDrawsInDatabase() throws IOException {
         updatePageSource(pageUrl);
 
@@ -40,9 +40,10 @@ public class LottoSource extends MBNet{
 
         if(!lastDraw.isPresent()){
             if(lottoService.getAllDraws().size() == 0){
-                //populate all records
+                getLogger().info("Table Lotto is empty; populating Lotto with all records");
+
                 BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
-                String line = "";
+                String line;
 
                 List<Lotto> draws = new ArrayList<>();
 
@@ -50,20 +51,37 @@ public class LottoSource extends MBNet{
                     draws.add(new Lotto(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
                 }
 
+                getLogger().info("Saving all draws gathered from page source (Lotto)");
                 lottoService.saveAllDraws(draws);
             }
             else{
-                /*Long lastExisting;
-                List<MiniLotto> existingDraws = miniLottoService.getAllDraws();
-                List<MiniLotto> drawsToAdd = new ArrayList<>();
-                for(int i = existingDraws.size() - 1; i > 0; i--){
+                getLogger().info("Records are not up to date (Lotto)");
 
+                List<Lotto> existingDraws = lottoService.getAllDraws();
+                Long lastExistingInDb = existingDraws.get(existingDraws.size() - 1).getDrawNumber();
+
+                List<Lotto> drawsToAdd = new ArrayList<>();
+
+                BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
+                String line;
+
+                boolean canAdd = false;
+
+                while((line = bufReader.readLine()) != null) {
+
+                    if(processSource.getDrawNumberFromLine(line).equals(lastExistingInDb + 1)){
+                        canAdd = true;
+                    }
+
+                    if(canAdd){
+                        getLogger().info("Updating: " + processSource.getDrawNumberFromLine(line) + " " + processSource.getDrawDateFromLine(line) + " " + processSource.getDrawResultFromLine(line));
+
+                        drawsToAdd.add(new Lotto(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
+                    }
                 }
-                //only add missing record/s
-                */
+
+                lottoService.saveAllDraws(drawsToAdd);
             }
-
         }
-
     }
 }

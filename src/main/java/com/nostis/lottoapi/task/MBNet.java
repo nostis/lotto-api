@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MBNet {
     private String pageSource;
     private Long lastDrawNumber;
+    private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
     public MBNet() {
         pageSource = "";
@@ -57,5 +59,8 @@ public class MBNet {
     }
     public Long getLastDrawNumber(){
         return lastDrawNumber;
+    }
+    public Logger getLogger(){
+        return LOGGER;
     }
 }

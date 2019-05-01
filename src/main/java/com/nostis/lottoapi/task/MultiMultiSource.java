@@ -32,7 +32,7 @@ public class MultiMultiSource extends MBNet {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 5000, initialDelay = 7000)
+    @Scheduled(fixedDelay = 60000, initialDelay = 7000)
     public void updateDrawsInDatabase() throws IOException {
         updatePageSource(pageUrl);
 
@@ -40,9 +40,10 @@ public class MultiMultiSource extends MBNet {
 
         if(!lastDraw.isPresent()){
             if(multiMultiService.getAllDraws().size() == 0){
-                //populate all records
+                getLogger().info("Table MultiMulti is empty; populating MultiMulti with all records");
+
                 BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
-                String line = "";
+                String line;
 
                 List<MultiMulti> draws = new ArrayList<>();
 
@@ -50,21 +51,38 @@ public class MultiMultiSource extends MBNet {
                     draws.add(new MultiMulti(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
                 }
 
+                getLogger().info("Saving all draws gathered from page source (MultiMulti)");
                 multiMultiService.saveAllDraws(draws);
             }
             else{
-                /*Long lastExisting;
+                getLogger().info("Records are not up to date (MultiMulti)");
+
                 List<MultiMulti> existingDraws = multiMultiService.getAllDraws();
+                Long lastExistingInDb = existingDraws.get(existingDraws.size() - 1).getDrawNumber();
+
                 List<MultiMulti> drawsToAdd = new ArrayList<>();
-                for(int i = existingDraws.size() - 1; i > 0; i--){
 
+                BufferedReader bufReader = new BufferedReader(new StringReader(getPageSource()));
+                String line;
+
+                boolean canAdd = false;
+
+                while((line = bufReader.readLine()) != null) {
+
+                    if(processSource.getDrawNumberFromLine(line).equals(lastExistingInDb + 1)){
+                        canAdd = true;
+                    }
+
+                    if(canAdd){
+                        getLogger().info("Updating: " + processSource.getDrawNumberFromLine(line) + " " + processSource.getDrawDateFromLine(line) + " " + processSource.getDrawResultFromLine(line));
+
+                        drawsToAdd.add(new MultiMulti(processSource.getDrawNumberFromLine(line), processSource.getDrawDateFromLine(line), processSource.getDrawResultFromLine(line)));
+                    }
                 }
-                //only add missing record/s
-                */
 
+                multiMultiService.saveAllDraws(drawsToAdd);
             }
-
         }
-
     }
 }
+
