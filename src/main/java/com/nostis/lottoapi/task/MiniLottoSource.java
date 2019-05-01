@@ -81,6 +81,7 @@ public class MiniLottoSource extends MBNet {
                 }
 
                 miniLottoService.saveAllDraws(drawsToAdd);
+                getLogger().info("Draws added (MiniLotto)");
             }
         }
     }

@@ -81,6 +81,7 @@ public class MultiMultiSource extends MBNet {
                 }
 
                 multiMultiService.saveAllDraws(drawsToAdd);
+                getLogger().info("Draws added (MultiMulti)");
             }
         }
     }

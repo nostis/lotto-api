@@ -81,6 +81,7 @@ public class LottoSource extends MBNet{
                 }
 
                 lottoService.saveAllDraws(drawsToAdd);
+                getLogger().info("Draws added (Lotto)");
             }
         }
     }
