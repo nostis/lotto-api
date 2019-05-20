@@ -12,5 +12,6 @@ Available queries; <br>
 * /multi
 
 and inside them;
-* /all
-* ?page=**page**&size=**size**
+* ?page=**page**&size=**size**&sort=**sort**
+* /search
+  * /findByDrawNumber?drawNumber=**drawNumber**
