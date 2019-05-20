@@ -2,9 +2,8 @@ package com.nostis.lottoapi.repository;
 
 import com.nostis.lottoapi.model.MiniLotto;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
+@RepositoryRestResource(collectionResourceRel = "mini", path = "mini")
 public interface MiniLottoDTOCrud extends JpaRepository<MiniLotto, Long>, CustomMiniLotto<MiniLotto, Long> {
 }
