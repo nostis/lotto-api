@@ -3,8 +3,7 @@ REST api which helps in gathering informations about number lotteries (lotto in 
 
 Data used from: http://www.mbnet.com.pl/wyniki.htm
 
-1. You have to have installed MySQL server.
-2. In app properties (resources/application.properties file) you have to change url, username and password to these what you have.
+API available at: http://nostis.heliohost.org/lotto-api/
 
 Available queries; <br>
 * /lotto
