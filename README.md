@@ -3,7 +3,8 @@ REST api which helps in gathering informations about number lotteries (lotto in 
 
 Data used from: http://www.mbnet.com.pl/wyniki.htm
 
-API available at: http://nostis.heliohost.org/lotto-api/
+~~API available at: http://nostis.heliohost.org/lotto-api/~~
+↑ Currently not available
 
 Available queries; <br>
 * /lotto
