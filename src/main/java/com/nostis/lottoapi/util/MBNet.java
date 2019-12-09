@@ -1,7 +1,5 @@
-package com.nostis.lottoapi.task;
+package com.nostis.lottoapi.util;
 
-
-import com.nostis.lottoapi.util.ProcessSource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
