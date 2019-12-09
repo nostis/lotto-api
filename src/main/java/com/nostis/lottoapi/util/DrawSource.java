@@ -8,7 +8,6 @@ import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DrawSource extends MBNet {
     private final ProcessSource processSource;
@@ -25,7 +24,16 @@ public class DrawSource extends MBNet {
                 return this.getDrawsFromSource(drawType);
             }
             else {
+                List<Draw> toSave = new ArrayList<>();
+                List<Draw> drawsFromSource = this.getDrawsFromSource(drawType);
 
+                for(Draw draw : drawsFromSource) {
+                    if(!allDraws.contains(draw)) {
+                        toSave.add(draw);
+                    }
+                }
+
+                return toSave;
             }
         }
 
@@ -34,21 +42,6 @@ public class DrawSource extends MBNet {
 
     private boolean areDrawsUpToDate(List<? extends Draw> draws, Long lastDrawNumber) {
         return draws.stream().anyMatch(draw -> draw.getDrawNumber().equals(lastDrawNumber));
-    }
-
-    private Draw getEntityWithLastDrawNumber(List<Draw> draws) {
-        Map<Draw, Long> drawLongMap = draws.stream().collect(Collectors.toMap(draw -> draw, Draw::getDrawNumber));
-
-        Long highestNumber = 0L;
-        Draw drawWithHighestNumber = new Draw();
-
-        for (Map.Entry<Draw, Long> entry : drawLongMap.entrySet()) {
-            if (entry.getValue() > highestNumber) {
-                drawWithHighestNumber = entry.getKey();
-            }
-        }
-
-        return drawWithHighestNumber;
     }
 
     private Draw getDrawFromLine(String line, Class<? extends Draw> drawType) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
