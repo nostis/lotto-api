@@ -33,8 +33,4 @@ public class Draw implements Cloneable {
     }
 
     public Draw(){}
-
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }
