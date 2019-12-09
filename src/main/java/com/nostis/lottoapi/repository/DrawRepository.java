@@ -1,13 +1,14 @@
 package com.nostis.lottoapi.repository;
 
 import com.nostis.lottoapi.model.Draw;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface DrawRepository extends JpaRepository<Draw, Long> {
-    List<Draw> findByDrawType(String drawType);
-    Draw findByDrawNumberAndDrawType(Long drawNumber, String drawType);
+public interface DrawRepository extends CrudRepository<Draw, Long> {
+    Optional<Draw> findByDrawNumber(Long drawNumber);
+    List<Draw> findAllByType(String type);
 }

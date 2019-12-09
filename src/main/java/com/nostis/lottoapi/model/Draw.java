@@ -4,24 +4,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="draw_type",
-        discriminatorType = DiscriminatorType.STRING)
-public class Draw {
+@DiscriminatorColumn(name="type")
+public class Draw implements Cloneable {
     @Id
+    @GeneratedValue
     private Long id;
     @Column(name = "draw_number")
-    private Long drawNumber;
+    protected Long drawNumber;
     @Column(name = "draw_date")
     @JsonFormat(timezone = "Europe/Warsaw", pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    private Date drawDate;
+    protected Date drawDate;
     @ElementCollection
-    private List<Byte> result;
+    protected List<Byte> result;
+    @Column(updatable = false, insertable = false)
+    private String type;
 
     public Draw(Long drawNumber, Date drawDate, List<Byte> result) {
         this.drawNumber = drawNumber;;
@@ -30,4 +33,8 @@ public class Draw {
     }
 
     public Draw(){}
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
