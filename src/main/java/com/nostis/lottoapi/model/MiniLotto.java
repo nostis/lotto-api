@@ -9,4 +9,12 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("mini_lotto")
 public class MiniLotto extends Draw {
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof Draw) {
+            return this.getDrawNumber().equals(((Draw) other).getDrawNumber());
+        }
+
+        return true;
+    }
 }

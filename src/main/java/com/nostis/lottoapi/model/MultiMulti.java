@@ -9,4 +9,12 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("multi_multi")
 public class MultiMulti extends Draw {
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof Draw) {
+            return this.getDrawNumber().equals(((Draw) other).getDrawNumber());
+        }
+
+        return true;
+    }
 }
