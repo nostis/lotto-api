@@ -21,26 +21,23 @@ import java.util.List;
 public class DrawUpdater {
     @Autowired
     private DrawService drawService;
+    @Autowired
+    private ProcessSource processSource;
+    @Autowired
+    private DrawSource drawSource;
 
     @Transactional
     @Scheduled(fixedDelay = 10000, initialDelay = 5000)
     public void updateDraws() throws IOException, CloneNotSupportedException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        ProcessSource processSource = new ProcessSource();
-        DrawSource drawSource = new DrawSource(processSource);
+        this.updateAndSave("http://www.mbnet.com.pl/dl.txt", "lotto", Lotto.class);
+        this.updateAndSave("http://www.mbnet.com.pl/el.txt", "mini_lotto", MiniLotto.class);
+        this.updateAndSave("http://www.mbnet.com.pl/ml.txt", "multi_multi", MultiMulti.class);
+    }
 
-        List<Draw> allDrawsLotto = this.drawService.findAllByDrawType("lotto");
+    private void updateAndSave(String url, String type, Class<? extends Draw> classType) throws CloneNotSupportedException, InvocationTargetException, IOException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+        List<Draw> allDraws = this.drawService.findAllByDrawType(type);
         List<Draw> toSave;
-        toSave = drawSource.getDrawsToSave(allDrawsLotto, "http://www.mbnet.com.pl/dl.txt", Lotto.class);
+        toSave = this.drawSource.getDrawsToSave(allDraws, url, classType);
         this.drawService.saveAllDraws(toSave);
-
-        List<Draw> allDrawsMini = this.drawService.findAllByDrawType("mini_lotto");
-        List<Draw> toSaveMini;
-        toSaveMini = drawSource.getDrawsToSave(allDrawsMini, "http://www.mbnet.com.pl/el.txt", MiniLotto.class);
-        this.drawService.saveAllDraws(toSaveMini);
-
-        List<Draw> allDrawsMulti = this.drawService.findAllByDrawType("multi_multi");
-        List<Draw> toSaveMulti;
-        toSaveMulti = drawSource.getDrawsToSave(allDrawsMulti, "http://www.mbnet.com.pl/ml.txt", MultiMulti.class);
-        this.drawService.saveAllDraws(toSaveMulti);
     }
 }

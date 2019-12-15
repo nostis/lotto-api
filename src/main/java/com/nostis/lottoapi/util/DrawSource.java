@@ -1,6 +1,7 @@
 package com.nostis.lottoapi.util;
 
 import com.nostis.lottoapi.model.Draw;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 
+@Component
 public class DrawSource extends MBNet {
     private final ProcessSource processSource;
 
