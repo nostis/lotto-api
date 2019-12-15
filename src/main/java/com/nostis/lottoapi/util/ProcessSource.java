@@ -1,5 +1,7 @@
 package com.nostis.lottoapi.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -12,6 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class ProcessSource {
     private final String PTRN_DRAW_DATE = "([^ ]++(?= \\d++,\\d++,\\d++,\\d++,\\d++))";
     private final String PTRN_DRAW_NUMBER = "\\d++(?=\\. \\d++\\.\\d++\\.\\d++ \\d++,\\d++,\\d++,\\d++,\\d++)";

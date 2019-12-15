@@ -1,33 +1,20 @@
 package com.nostis.lottoapi.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Data
 @Entity
-public class Lotto {
-    @Id
-    @GeneratedValue(generator = "gen")
-    @GenericGenerator(name = "gen", strategy = "increment")
-    private Long id;
-    private Long drawNumber;
-    @Column
-    @JsonFormat(timezone = "Europe/Warsaw", pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-    private Date drawDate;
-    @Column
-    @ElementCollection
-    private List<Byte> numbers;
+@DiscriminatorValue("lotto")
+public class Lotto extends Draw {
+    @Override
+    public boolean equals(Object other) {
+        if(other instanceof Draw) {
+            return this.getDrawNumber().equals(((Draw) other).getDrawNumber());
+        }
 
-    public Lotto(Long drawNumber, Date drawDate, List<Byte> numbers) {
-        this.drawNumber = drawNumber;;
-        this.drawDate = drawDate;
-        this.numbers = numbers;
+        return true;
     }
-
-    public Lotto(){}
 }
