@@ -9,10 +9,9 @@ Data used from: http://www.mbnet.com.pl/wyniki.htm
 
 Available queries; <br>
 * /lotto
-* /mini
-* /multi
+* /mini-lotto
+* /multi-multi
 
 and inside them;
-* ?page=**page**&size=**size**&sort=**sort**
-* /search
-  * /findByDrawNumber?drawNumber=**drawNumber**
+* /?page=page e.g. ?page=32
+
